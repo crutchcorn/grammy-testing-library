@@ -129,7 +129,7 @@ test("Welcomes the user", async () => {
 });
 ```
 
-Invalid MarkdownV2 fails just like it would on Telegram, with a `GrammyError` such as `Bad Request: can't parse entities: Character '!' is reserved and must be escaped with the preceding '\'`. Parsing is handled by [`grammy-markdown-v2-parser`](../grammy-markdown-v2-parser), which you can also use on its own.
+Invalid MarkdownV2 fails just like it would on Telegram, with a `GrammyError` such as `Bad Request: can't parse entities: Character '!' is reserved and must be escaped with the preceding '\'`. Parsing is handled by [`grammy-markdown-v2-parser`](https://github.com/crutchcorn/grammy-testing-library/tree/main/packages/grammy-markdown-v2-parser), which you can also use on its own.
 
 The `HTML` and legacy `Markdown` parse modes aren't supported yet.
 
