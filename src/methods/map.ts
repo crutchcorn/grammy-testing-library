@@ -1,15 +1,19 @@
 import { ApiMethods, Opts } from "@grammyjs/types";
+import { addMessage, botInfo, type ChatStore } from "../store.ts";
 
 export type Returns<F> = {
   [M in keyof ApiMethods<F>]: ReturnType<ApiMethods<F>[M]>;
 };
 
 export type MethodMap = {
-  [K in keyof ApiMethods<unknown>]: ApiMethods<unknown>[K];
+  [K in keyof ApiMethods<unknown>]: (
+    props: Opts<unknown>[K],
+    store: ChatStore,
+  ) => Returns<unknown>[K];
 };
 
 // Used to ensure that all methods in the map are implemented
-const _methodMap: MethodMap = {
+export const methodMap: MethodMap = {
   getUpdates: getUpdates,
   setWebhook: setWebhook,
   deleteWebhook: deleteWebhook,
@@ -222,8 +226,7 @@ export function getWebhookInfo(): Returns<unknown>["getWebhookInfo"] {
   return 0 as never;
 }
 export function getMe(): Returns<unknown>["getMe"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  return botInfo;
 }
 export function logOut(): Returns<unknown>["logOut"] {
   throw new Error("Not implemented");
@@ -234,10 +237,17 @@ export function close(): Returns<unknown>["close"] {
   return 0 as never;
 }
 export function sendMessage(
-  _props: Opts<unknown>["sendMessage"],
+  props: Opts<unknown>["sendMessage"],
+  store: ChatStore,
 ): Returns<unknown>["sendMessage"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  const message = addMessage(store, {
+    from: store.bot,
+    text: props.text,
+    ...(props.reply_markup && "inline_keyboard" in props.reply_markup
+      ? { reply_markup: props.reply_markup }
+      : {}),
+  });
+  return structuredClone(message);
 }
 export function forwardMessage(
   _props: Opts<unknown>["forwardMessage"],

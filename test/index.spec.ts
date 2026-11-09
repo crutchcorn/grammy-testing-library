@@ -2,10 +2,20 @@ import { test, expect } from "vitest";
 import { render } from "../src/index.ts";
 import { Bot } from "grammy";
 
-const bot = new Bot("");
+const bot = new Bot("test-token");
 
-bot.on("message", async (ctx) => {
+bot.command("start", async (ctx) => {
   await ctx.reply("Hello World");
+});
+
+test("Replies to the `/start` command", async () => {
+  const { userEvent, findByText } = render(bot);
+
+  await userEvent.sendMessage("/start");
+
+  expect(await findByText("Hello World")).toMatchObject({
+    from: { is_bot: true },
+  });
 });
 
 test.skip("Is able to handle `/start` command", async () => {
