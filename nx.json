@@ -1,19 +1,28 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*"]
+    "default": ["{projectRoot}/**/*", "!{projectRoot}/dist/**/*"]
   },
   "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"],
+      "outputs": ["{projectRoot}/dist"]
+    },
     "test": {
       "cache": true,
+      "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
     },
     "lint": {
       "cache": true,
+      "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
     },
     "typecheck": {
       "cache": true,
+      "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
     }
   }

@@ -18,6 +18,9 @@ Run from the repository root; Nx runs each project's script of the same name.
 - Typecheck: `pnpm typecheck`
 - Lint: `pnpm lint`
 - Test: `pnpm test`
+- Build: `pnpm build`
+
+Published packages build to `dist` with tsdown, and their `exports` point there. Workspace dependents resolve each other through `dist`, so Nx builds dependencies before `lint`, `typecheck`, and `test`.
 
 ## Releases
 
@@ -26,7 +29,7 @@ Run from the repository root; Nx runs each project's script of the same name.
 
 ## CI
 
-- `.github/workflows/ci.yml` checks formatting, linting, and tests; `.github/workflows/zizmor.yml` audits the workflows with zizmor.
+- `.github/workflows/ci.yml` checks formatting, linting, tests, and the build; `.github/workflows/zizmor.yml` audits the workflows with zizmor.
 - `.github/workflows/release.yml` uses Changesets to open a version pull request, then publishes to npm through trusted publishing (OIDC) once it merges.
 - Keep actions pinned to commit SHAs. Upgrade them with `pnpm update -L --include-github-actions "actions/*" "pnpm/*" "zizmorcore/*" "changesets/*"`.
 - Node's version lives in `.node-version` and pnpm's in the root `packageManager` field; CI reads both.

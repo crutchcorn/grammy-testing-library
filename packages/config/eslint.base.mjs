@@ -2,9 +2,9 @@
 
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default defineConfig({
+export default defineConfig(globalIgnores(["dist"]), {
   plugins: {
     "@typescript-eslint": tseslint.plugin,
   },
