@@ -25,6 +25,7 @@ export interface ChatStore {
   nextMessageId: number;
   nextUpdateId: number;
   nextCallbackQueryId: number;
+  mounted: boolean;
 }
 
 export function createChatStore(): ChatStore {
@@ -43,6 +44,7 @@ export function createChatStore(): ChatStore {
     nextMessageId: 1,
     nextUpdateId: 1,
     nextCallbackQueryId: 1,
+    mounted: true,
   };
 }
 

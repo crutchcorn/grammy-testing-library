@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Bot } from "grammy";
 import type { Message } from "@grammyjs/types";
+import { afterEach } from "vitest";
 import "./matchers.ts";
 import { BadRequest } from "./methods/bad-request.ts";
 import { methodMap } from "./methods/map.ts";
@@ -59,10 +60,22 @@ function getSession(bot: Bot<any>): Session {
 
 const commandPattern = /^\/[A-Za-z0-9_]+(?:@[A-Za-z0-9_]+)?/;
 
+const mountedStores = new Set<ChatStore>();
+
+export function cleanup(): void {
+  for (const store of mountedStores) store.mounted = false;
+  mountedStores.clear();
+}
+
+afterEach(cleanup);
+
 export function render(bot: Bot<any>): RenderReturn {
   const session = getSession(bot);
+  session.store.mounted = false;
+  mountedStores.delete(session.store);
   const store = createChatStore();
   session.store = store;
+  mountedStores.add(store);
 
   const userEvent: UserEvent = {
     sendMessage: async (text) => {
@@ -120,7 +133,12 @@ export function render(bot: Bot<any>): RenderReturn {
     },
   };
 
-  const clear: RenderReturn["clear"] = ({ keepLast: _keepLast } = {}) => {};
+  const clear: RenderReturn["clear"] = ({ keepLast = false } = {}) => {
+    store.messages.splice(
+      0,
+      keepLast ? store.messages.length - 1 : store.messages.length,
+    );
+  };
 
   return {
     userEvent,

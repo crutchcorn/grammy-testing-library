@@ -34,13 +34,19 @@ expect.extend({
       };
     }
 
-    const pass = store.messages.some((message) => message === received);
+    const pass =
+      store.mounted && store.messages.some((message) => message === received);
     return {
       pass,
-      message: () =>
-        pass
-          ? `${hint}\n\nExpected the message not to be in the chat, but it is:\n\n${prettyChat(store)}`
-          : `${hint}\n\nExpected the message to be in the chat, but it is no longer there:\n\n${prettyChat(store)}`,
+      message: () => {
+        if (pass) {
+          return `${hint}\n\nExpected the message not to be in the chat, but it is:\n\n${prettyChat(store)}`;
+        }
+        if (!store.mounted) {
+          return `${hint}\n\nExpected the message to be in the chat, but its chat was cleaned up by a later render() or the end of a test`;
+        }
+        return `${hint}\n\nExpected the message to be in the chat, but it is no longer there:\n\n${prettyChat(store)}`;
+      },
     };
   },
 });

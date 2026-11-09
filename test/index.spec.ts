@@ -65,6 +65,28 @@ test("Pressing an inline button can delete the message", async () => {
   expect(secret).not.toBeInTheChat();
 });
 
+test("`clear` hides earlier messages from queries", async () => {
+  const { userEvent, clear, findByText } = render(bot);
+
+  await userEvent.sendMessage("/start");
+  const firstGreeting = await findByText("Hello World");
+  await userEvent.sendMessage("/start");
+  clear({ keepLast: true });
+
+  expect(firstGreeting).not.toBeInTheChat();
+  expect(await findByText("Hello World")).toBeInTheChat();
+});
+
+test("Messages from an earlier render are no longer in the chat", async () => {
+  const first = render(bot);
+  await first.userEvent.sendMessage("/start");
+  const greeting = await first.findByText("Hello World");
+
+  render(bot);
+
+  expect(greeting).not.toBeInTheChat();
+});
+
 test.skip("Is able to handle `/start` command", async () => {
   const { userEvent, clear, findByText } = render(bot);
 
