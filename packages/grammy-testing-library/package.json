@@ -12,6 +12,9 @@
     "grammy": "^1.36.1",
     "grammy-markdown-v2-parser": "workspace:*"
   },
+  "peerDependencies": {
+    "vitest": "^5.1.0"
+  },
   "devDependencies": {
     "@grammy-testing-library/config": "workspace:*",
     "@types/node": "^26.6.6",
