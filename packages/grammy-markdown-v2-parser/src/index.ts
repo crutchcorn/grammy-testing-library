@@ -122,7 +122,10 @@ function isEndOfEntity(
   }
 }
 
-function readUrl(markdown: string, start: number): { url: string; end: number } {
+function readUrl(
+  markdown: string,
+  start: number,
+): { url: string; end: number } {
   let url = "";
   let index = start;
   while (index < markdown.length && markdown[index] !== ")") {
@@ -184,7 +187,9 @@ function compareEntities(
   b: ParsedMessageEntity,
 ): number {
   return (
-    a.offset - b.offset || b.length - a.length || getPriority(a) - getPriority(b)
+    a.offset - b.offset ||
+    b.length - a.length ||
+    getPriority(a) - getPriority(b)
   );
 }
 
@@ -325,7 +330,8 @@ export function parseMarkdownV2(markdown: string): FormattedText {
 
     const open = nested[nested.length - 1];
     let skip = text.length === open.offset;
-    let entity: DistributiveOmit<ParsedMessageEntity, "offset" | "length"> | undefined;
+    let entity:
+      DistributiveOmit<ParsedMessageEntity, "offset" | "length"> | undefined;
     switch (kind) {
       case "Bold":
         entity = { type: "bold" };
@@ -419,10 +425,7 @@ export function parseMarkdownV2(markdown: string): FormattedText {
   if (haveBlockquote) {
     let type: "blockquote" | "expandable_blockquote" = "blockquote";
     const top = nested[nested.length - 1];
-    if (
-      top.kind === "Spoiler" &&
-      top.markdownIndex === markdown.length - 2
-    ) {
+    if (top.kind === "Spoiler" && top.markdownIndex === markdown.length - 2) {
       nested.pop();
       type = "expandable_blockquote";
     }

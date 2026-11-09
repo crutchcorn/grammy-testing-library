@@ -30,7 +30,10 @@ function getTgLinkParameters(
       separator === -1 ? parameter : parameter.slice(0, separator)
     ).toLowerCase();
     if (!parameters.has(key)) {
-      parameters.set(key, separator === -1 ? "" : parameter.slice(separator + 1));
+      parameters.set(
+        key,
+        separator === -1 ? "" : parameter.slice(separator + 1),
+      );
     }
   }
   return parameters;
@@ -50,7 +53,9 @@ export function getLinkCustomEmojiId(url: string): string | undefined {
 
 export function getLinkDateTime(
   url: string,
-): Omit<MessageEntity.DateTimeMessageEntity, "type" | "offset" | "length"> | undefined {
+):
+  | Omit<MessageEntity.DateTimeMessageEntity, "type" | "offset" | "length">
+  | undefined {
   const parameters = getTgLinkParameters(url, "time");
   const unixTime = parseInt64(parameters?.get("unix") ?? "");
   const format = parameters?.get("format") ?? "";

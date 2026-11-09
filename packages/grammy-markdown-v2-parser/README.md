@@ -50,21 +50,21 @@ Like the Bot API, `offset` and `length` count UTF-16 code units, which is how Ja
 
 The parser supports everything MarkdownV2 does, including nested entities:
 
-| Markdown                                      | Entity                  |
-| --------------------------------------------- | ----------------------- |
-| `*bold*`                                      | `bold`                  |
-| `_italic_`                                    | `italic`                |
-| `__underline__`                               | `underline`             |
-| `~strikethrough~`                             | `strikethrough`         |
-| `\|\|spoiler\|\|`                             | `spoiler`               |
-| `` `code` ``                                  | `code`                  |
-| ` ```language\ncode``` `                      | `pre`                   |
-| `[text](https://example.com)`                 | `text_link`             |
-| `[text](tg://user?id=123456789)`              | `text_mention`          |
-| `![👍](tg://emoji?id=5368324170671202286)`    | `custom_emoji`          |
+| Markdown                                       | Entity                  |
+| ---------------------------------------------- | ----------------------- |
+| `*bold*`                                       | `bold`                  |
+| `_italic_`                                     | `italic`                |
+| `__underline__`                                | `underline`             |
+| `~strikethrough~`                              | `strikethrough`         |
+| `\|\|spoiler\|\|`                              | `spoiler`               |
+| `` `code` ``                                   | `code`                  |
+| ` ```language\ncode``` `                       | `pre`                   |
+| `[text](https://example.com)`                  | `text_link`             |
+| `[text](tg://user?id=123456789)`               | `text_mention`          |
+| `![👍](tg://emoji?id=5368324170671202286)`     | `custom_emoji`          |
 | `![22:45](tg://time?unix=1647531900&format=t)` | `date_time`             |
-| `>quote`                                      | `blockquote`            |
-| `**>quote\|\|`                                | `expandable_blockquote` |
+| `>quote`                                       | `blockquote`            |
+| `**>quote\|\|`                                 | `expandable_blockquote` |
 
 A `text_mention` entity only knows the ID from its link, so its `user` is `{ id }` rather than a full Bot API `User`.
 
@@ -75,7 +75,10 @@ Links that Telegram wouldn't accept, such as `javascript:` URLs, keep their text
 When Telegram would reject the text, `parseMarkdownV2` throws a `MarkdownV2ParseError` with the same message Telegram gives:
 
 ```ts
-import { MarkdownV2ParseError, parseMarkdownV2 } from "grammy-markdown-v2-parser";
+import {
+  MarkdownV2ParseError,
+  parseMarkdownV2,
+} from "grammy-markdown-v2-parser";
 
 try {
   parseMarkdownV2("Hello.");

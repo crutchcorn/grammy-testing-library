@@ -10,7 +10,9 @@ describe("inline formatting", () => {
   });
 
   test("italic, underline, strikethrough, and spoiler", () => {
-    expect(parseMarkdownV2("_italic_ __underline__ ~strike~ ||spoiler||")).toEqual({
+    expect(
+      parseMarkdownV2("_italic_ __underline__ ~strike~ ||spoiler||"),
+    ).toEqual({
       text: "italic underline strike spoiler",
       entities: [
         { type: "italic", offset: 0, length: 6 },
@@ -87,24 +89,26 @@ describe("links", () => {
 
 describe("custom emoji and dates", () => {
   test("custom emoji", () => {
-    expect(
-      parseMarkdownV2("![👍](tg://emoji?id=5368324170671202286)"),
-    ).toEqual({
-      text: "👍",
-      entities: [
-        {
-          type: "custom_emoji",
-          offset: 0,
-          length: 2,
-          custom_emoji_id: "5368324170671202286",
-        },
-      ],
-    });
+    expect(parseMarkdownV2("![👍](tg://emoji?id=5368324170671202286)")).toEqual(
+      {
+        text: "👍",
+        entities: [
+          {
+            type: "custom_emoji",
+            offset: 0,
+            length: 2,
+            custom_emoji_id: "5368324170671202286",
+          },
+        ],
+      },
+    );
   });
 
   test("date and time", () => {
     expect(
-      parseMarkdownV2("![22:45 tomorrow](tg://time?unix=1647531900&format=wDT)"),
+      parseMarkdownV2(
+        "![22:45 tomorrow](tg://time?unix=1647531900&format=wDT)",
+      ),
     ).toEqual({
       text: "22:45 tomorrow",
       entities: [
@@ -154,9 +158,7 @@ describe("block quotations", () => {
   });
 
   test("expandable block quotation", () => {
-    expect(
-      parseMarkdownV2("**>Expandable quotation\n>Hidden part||"),
-    ).toEqual({
+    expect(parseMarkdownV2("**>Expandable quotation\n>Hidden part||")).toEqual({
       text: "Expandable quotation\nHidden part",
       entities: [{ type: "expandable_blockquote", offset: 0, length: 32 }],
     });
@@ -174,7 +176,9 @@ describe("errors match Telegram's", () => {
 
   test("unclosed entity reports its byte offset", () => {
     expect(() => parseMarkdownV2("👍 *bold")).toThrow(
-      new MarkdownV2ParseError("Can't find end of Bold entity at byte offset 5"),
+      new MarkdownV2ParseError(
+        "Can't find end of Bold entity at byte offset 5",
+      ),
     );
   });
 

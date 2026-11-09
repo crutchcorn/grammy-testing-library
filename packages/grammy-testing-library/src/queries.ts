@@ -4,7 +4,10 @@ import type { ChatStore } from "./store.ts";
 
 export type TextMatch = string | RegExp;
 
-export function matches(content: string | undefined, matcher: TextMatch): boolean {
+export function matches(
+  content: string | undefined,
+  matcher: TextMatch,
+): boolean {
   if (content === undefined) return false;
   const normalized = content.trim().replace(/\s+/g, " ");
   return typeof matcher === "string"
@@ -17,7 +20,8 @@ export function prettyChat(store: ChatStore): string {
   return store.messages
     .map((message) => {
       const author = message.from?.id === store.bot.id ? "Bot" : "User";
-      const content = message.text ?? message.caption ?? "(unsupported message)";
+      const content =
+        message.text ?? message.caption ?? "(unsupported message)";
       const keyboard = (message.reply_markup?.inline_keyboard ?? []).map(
         (row) => `  ${row.map((button) => `[${button.text}]`).join(" ")}`,
       );
