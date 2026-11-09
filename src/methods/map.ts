@@ -165,6 +165,38 @@ const _methodMap: MethodMap = {
   sendGame: sendGame,
   setGameScore: setGameScore,
   getGameHighScores: getGameHighScores,
+  sendRichMessage: sendRichMessage,
+  sendLivePhoto: sendLivePhoto,
+  sendChecklist: sendChecklist,
+  editMessageChecklist: editMessageChecklist,
+  sendMessageDraft: sendMessageDraft,
+  sendRichMessageDraft: sendRichMessageDraft,
+  getUserProfileAudios: getUserProfileAudios,
+  setChatMemberTag: setChatMemberTag,
+  answerChatJoinRequestQuery: answerChatJoinRequestQuery,
+  sendChatJoinRequestWebApp: sendChatJoinRequestWebApp,
+  approveSuggestedPost: approveSuggestedPost,
+  declineSuggestedPost: declineSuggestedPost,
+  getUserPersonalChatMessages: getUserPersonalChatMessages,
+  answerGuestQuery: answerGuestQuery,
+  getUserGifts: getUserGifts,
+  getChatGifts: getChatGifts,
+  getManagedBotToken: getManagedBotToken,
+  replaceManagedBotToken: replaceManagedBotToken,
+  getManagedBotAccessSettings: getManagedBotAccessSettings,
+  setManagedBotAccessSettings: setManagedBotAccessSettings,
+  setMyProfilePhoto: setMyProfilePhoto,
+  removeMyProfilePhoto: removeMyProfilePhoto,
+  getMyStarBalance: getMyStarBalance,
+  editEphemeralMessageText: editEphemeralMessageText,
+  editEphemeralMessageMedia: editEphemeralMessageMedia,
+  editEphemeralMessageCaption: editEphemeralMessageCaption,
+  editEphemeralMessageReplyMarkup: editEphemeralMessageReplyMarkup,
+  deleteEphemeralMessage: deleteEphemeralMessage,
+  deleteMessageReaction: deleteMessageReaction,
+  deleteAllMessageReactions: deleteAllMessageReactions,
+  repostStory: repostStory,
+  savePreparedKeyboardButton: savePreparedKeyboardButton,
 };
 
 export function getUpdates(
@@ -1082,6 +1114,194 @@ export function setGameScore(
 export function getGameHighScores(
   _props: Opts<unknown>["getGameHighScores"],
 ): Returns<unknown>["getGameHighScores"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendRichMessage(
+  _props: Opts<unknown>["sendRichMessage"],
+): Returns<unknown>["sendRichMessage"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendLivePhoto(
+  _props: Opts<unknown>["sendLivePhoto"],
+): Returns<unknown>["sendLivePhoto"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendChecklist(
+  _props: Opts<unknown>["sendChecklist"],
+): Returns<unknown>["sendChecklist"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function editMessageChecklist(
+  _props: Opts<unknown>["editMessageChecklist"],
+): Returns<unknown>["editMessageChecklist"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendMessageDraft(
+  _props: Opts<unknown>["sendMessageDraft"],
+): Returns<unknown>["sendMessageDraft"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendRichMessageDraft(
+  _props: Opts<unknown>["sendRichMessageDraft"],
+): Returns<unknown>["sendRichMessageDraft"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getUserProfileAudios(
+  _props: Opts<unknown>["getUserProfileAudios"],
+): Returns<unknown>["getUserProfileAudios"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function setChatMemberTag(
+  _props: Opts<unknown>["setChatMemberTag"],
+): Returns<unknown>["setChatMemberTag"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function answerChatJoinRequestQuery(
+  _props: Opts<unknown>["answerChatJoinRequestQuery"],
+): Returns<unknown>["answerChatJoinRequestQuery"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function sendChatJoinRequestWebApp(
+  _props: Opts<unknown>["sendChatJoinRequestWebApp"],
+): Returns<unknown>["sendChatJoinRequestWebApp"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function approveSuggestedPost(
+  _props: Opts<unknown>["approveSuggestedPost"],
+): Returns<unknown>["approveSuggestedPost"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function declineSuggestedPost(
+  _props: Opts<unknown>["declineSuggestedPost"],
+): Returns<unknown>["declineSuggestedPost"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getUserPersonalChatMessages(
+  _props: Opts<unknown>["getUserPersonalChatMessages"],
+): Returns<unknown>["getUserPersonalChatMessages"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function answerGuestQuery(
+  _props: Opts<unknown>["answerGuestQuery"],
+): Returns<unknown>["answerGuestQuery"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getUserGifts(
+  _props: Opts<unknown>["getUserGifts"],
+): Returns<unknown>["getUserGifts"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getChatGifts(
+  _props: Opts<unknown>["getChatGifts"],
+): Returns<unknown>["getChatGifts"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getManagedBotToken(
+  _props: Opts<unknown>["getManagedBotToken"],
+): Returns<unknown>["getManagedBotToken"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function replaceManagedBotToken(
+  _props: Opts<unknown>["replaceManagedBotToken"],
+): Returns<unknown>["replaceManagedBotToken"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getManagedBotAccessSettings(
+  _props: Opts<unknown>["getManagedBotAccessSettings"],
+): Returns<unknown>["getManagedBotAccessSettings"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function setManagedBotAccessSettings(
+  _props: Opts<unknown>["setManagedBotAccessSettings"],
+): Returns<unknown>["setManagedBotAccessSettings"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function setMyProfilePhoto(
+  _props: Opts<unknown>["setMyProfilePhoto"],
+): Returns<unknown>["setMyProfilePhoto"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function removeMyProfilePhoto(): Returns<unknown>["removeMyProfilePhoto"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function getMyStarBalance(): Returns<unknown>["getMyStarBalance"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function editEphemeralMessageText(
+  _props: Opts<unknown>["editEphemeralMessageText"],
+): Returns<unknown>["editEphemeralMessageText"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function editEphemeralMessageMedia(
+  _props: Opts<unknown>["editEphemeralMessageMedia"],
+): Returns<unknown>["editEphemeralMessageMedia"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function editEphemeralMessageCaption(
+  _props: Opts<unknown>["editEphemeralMessageCaption"],
+): Returns<unknown>["editEphemeralMessageCaption"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function editEphemeralMessageReplyMarkup(
+  _props: Opts<unknown>["editEphemeralMessageReplyMarkup"],
+): Returns<unknown>["editEphemeralMessageReplyMarkup"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function deleteEphemeralMessage(
+  _props: Opts<unknown>["deleteEphemeralMessage"],
+): Returns<unknown>["deleteEphemeralMessage"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function deleteMessageReaction(
+  _props: Opts<unknown>["deleteMessageReaction"],
+): Returns<unknown>["deleteMessageReaction"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function deleteAllMessageReactions(
+  _props: Opts<unknown>["deleteAllMessageReactions"],
+): Returns<unknown>["deleteAllMessageReactions"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function repostStory(
+  _props: Opts<unknown>["repostStory"],
+): Returns<unknown>["repostStory"] {
+  throw new Error("Not implemented");
+  return 0 as never;
+}
+export function savePreparedKeyboardButton(
+  _props: Opts<unknown>["savePreparedKeyboardButton"],
+): Returns<unknown>["savePreparedKeyboardButton"] {
   throw new Error("Not implemented");
   return 0 as never;
 }
