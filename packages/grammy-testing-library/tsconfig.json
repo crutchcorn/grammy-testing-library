@@ -1,0 +1,7 @@
+{
+  "extends": "@grammy-testing-library/config/tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["eslint.config.mjs", "src", "test"]
+}

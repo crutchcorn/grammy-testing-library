@@ -2,13 +2,24 @@
 
 `grammy-testing-library` tests grammY bots in the style of DOM Testing Library: tests act as a user, and assertions check what appears in the chat.
 
+## Layout
+
+An Nx + pnpm workspace monorepo.
+
+- `packages/grammy-testing-library`: the published library, with its source and tests.
+- `packages/config` (private): the shared `tsconfig.base.json` and `eslint.base.mjs`. Each project extends them from its own `tsconfig.json` and `eslint.config.mjs`.
+
 ## Checks
 
-- Typecheck: `pnpm exec tsc --noEmit -p .`
-- Lint: `pnpm exec eslint .`
-- Test: `pnpm exec vitest run`
+Run from the repository root; Nx runs each project's script of the same name.
+
+- Typecheck: `pnpm typecheck`
+- Lint: `pnpm lint`
+- Test: `pnpm test`
 
 ## Conventions
+
+Paths below are relative to `packages/grammy-testing-library`.
 
 - Keep an explicit stub that throws `new Error("Not implemented")` for every Bot API method in `src/methods/map.ts`. Do not replace them with a proxy or a `Partial` fallback; the stubs make unsupported methods visible.
 - Keep `@grammyjs/types` on the same version that grammY depends on (see `node_modules/grammy/package.json`). A mismatch installs duplicate types and leaves `methodMap` missing methods.

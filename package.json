@@ -1,21 +1,14 @@
 {
-  "name": "grammy-testing-library",
-  "version": "0.0.1",
+  "name": "grammy-testing-library-monorepo",
+  "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.11.2",
   "scripts": {
-    "test": "vitest",
-    "lint": "eslint . --ext .ts,.mjs"
-  },
-  "dependencies": {
-    "@grammyjs/types": "^5.0.0",
-    "grammy": "^1.36.1"
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
+    "typecheck": "nx run-many -t typecheck"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.14.0",
-    "ts-morph": "^26.0.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.72.1",
-    "vitest": "^5.1.0"
+    "nx": "^24.0.5"
   }
 }

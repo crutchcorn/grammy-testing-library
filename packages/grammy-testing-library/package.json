@@ -1,0 +1,22 @@
+{
+  "name": "grammy-testing-library",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "lint": "eslint . --ext .ts,.mjs",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@grammyjs/types": "^5.0.0",
+    "grammy": "^1.36.1"
+  },
+  "devDependencies": {
+    "@grammy-testing-library/config": "workspace:*",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "ts-morph": "^26.0.0",
+    "typescript": "^6.0.2",
+    "vitest": "^5.1.0"
+  }
+}

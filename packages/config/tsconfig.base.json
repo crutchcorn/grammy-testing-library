@@ -12,6 +12,5 @@
     "erasableSyntaxOnly": true,
     "allowImportingTsExtensions": true,
     "esModuleInterop": true
-  },
-  "include": ["eslint.config.mjs", "src", "test"]
+  }
 }

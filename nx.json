@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"]
+  },
+  "targetDefaults": {
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    },
+    "typecheck": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    }
+  }
+}
