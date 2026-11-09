@@ -23,14 +23,32 @@ export interface ChatStore {
   chat: Chat.PrivateChat;
   messages: Message[];
   nextMessageId: number;
-  nextUpdateId: number;
-  nextCallbackQueryId: number;
-  mounted: boolean;
 }
 
-export function createChatStore(): ChatStore {
-  const user: User = { id: 2, is_bot: false, first_name: "Test User" };
+// Telegram's view of one bot: every chat it can reach, keyed by chat ID
+export interface BotServer {
+  chats: Map<number, ChatStore>;
+  nextUserId: number;
+  nextUpdateId: number;
+  nextCallbackQueryId: number;
+}
+
+export function createBotServer(): BotServer {
   return {
+    chats: new Map(),
+    nextUserId: 1000,
+    nextUpdateId: 1,
+    nextCallbackQueryId: 1,
+  };
+}
+
+export function createChat(server: BotServer): ChatStore {
+  const user: User = {
+    id: server.nextUserId++,
+    is_bot: false,
+    first_name: "Test User",
+  };
+  const store: ChatStore = {
     bot: {
       id: botInfo.id,
       is_bot: true,
@@ -42,10 +60,18 @@ export function createChatStore(): ChatStore {
     chat: { id: user.id, type: "private", first_name: user.first_name },
     messages: [],
     nextMessageId: 1,
-    nextUpdateId: 1,
-    nextCallbackQueryId: 1,
-    mounted: true,
   };
+  server.chats.set(store.chat.id, store);
+  return store;
+}
+
+export function findChat(
+  server: BotServer,
+  chatId: number | string,
+): ChatStore {
+  const store = server.chats.get(Number(chatId));
+  if (!store) throw new BadRequest("chat not found");
+  return store;
 }
 
 export function addMessage(

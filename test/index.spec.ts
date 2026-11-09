@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { describe, test, expect } from "vitest";
 import { render } from "../src/index.ts";
 import { Bot, InlineKeyboard } from "grammy";
 
@@ -77,14 +77,36 @@ test("`clear` hides earlier messages from queries", async () => {
   expect(await findByText("Hello World")).toBeInTheChat();
 });
 
-test("Messages from an earlier render are no longer in the chat", async () => {
+test("Each render is a separate chat", async () => {
   const first = render(bot);
+  const second = render(bot);
+
   await first.userEvent.sendMessage("/start");
-  const greeting = await first.findByText("Hello World");
 
-  render(bot);
+  expect(await first.findByText("Hello World")).toBeInTheChat();
+  expect(() => second.getByText("Hello World")).toThrow(/Unable to find/);
+});
 
-  expect(greeting).not.toBeInTheChat();
+describe.concurrent("Concurrent tests", () => {
+  test("Choosing Spanish", async ({ expect }) => {
+    const { userEvent, findByText } = render(bot);
+
+    await userEvent.sendMessage("/language");
+    const question = await findByText("What language are you trying to learn?");
+    await userEvent.pressInlineButton(question, "Spanish");
+
+    expect(await findByText("¡Vamos!")).toBeInTheChat();
+  });
+
+  test("Choosing French", async ({ expect }) => {
+    const { userEvent, findByText } = render(bot);
+
+    await userEvent.sendMessage("/language");
+    const question = await findByText("What language are you trying to learn?");
+    await userEvent.pressInlineButton(question, "French");
+
+    expect(await findByText("Allons-y !")).toBeInTheChat();
+  });
 });
 
 test.skip("Is able to handle `/start` command", async () => {

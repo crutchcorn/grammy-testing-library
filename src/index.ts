@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Bot } from "grammy";
 import type { Message } from "@grammyjs/types";
-import { afterEach } from "vitest";
 import "./matchers.ts";
 import { BadRequest } from "./methods/bad-request.ts";
 import { methodMap } from "./methods/map.ts";
@@ -12,7 +11,12 @@ import {
   prettyChat,
   type TextMatch,
 } from "./queries.ts";
-import { addMessage, createChatStore, type ChatStore } from "./store.ts";
+import {
+  addMessage,
+  createBotServer,
+  createChat,
+  type BotServer,
+} from "./store.ts";
 
 interface ClearOptions {
   keepLast?: boolean;
@@ -30,52 +34,36 @@ interface RenderReturn {
   findByText: (text: TextMatch) => Promise<Message>;
 }
 
-interface Session {
-  store: ChatStore;
-}
+// grammY can't uninstall transformers, so each bot gets one shared by all of its renders
+const servers = new WeakMap<Bot<any>, BotServer>();
 
-// grammY can't uninstall transformers, so each bot gets one that reads the latest render's store
-const sessions = new WeakMap<Bot<any>, Session>();
-
-function getSession(bot: Bot<any>): Session {
-  const existing = sessions.get(bot);
+function getServer(bot: Bot<any>): BotServer {
+  const existing = servers.get(bot);
   if (existing) return existing;
 
-  const session: Session = { store: createChatStore() };
+  const server = createBotServer();
   bot.api.config.use(async (_prev, method, payload) => {
     const handler = methodMap[method] as (
       props: unknown,
-      store: ChatStore,
+      server: BotServer,
     ) => unknown;
     try {
-      return { ok: true, result: handler(payload, session.store) } as any;
+      return { ok: true, result: handler(payload, server) } as any;
     } catch (error) {
       if (!(error instanceof BadRequest)) throw error;
       return { ok: false, error_code: 400, description: error.message } as any;
     }
   });
-  sessions.set(bot, session);
-  return session;
+  servers.set(bot, server);
+  return server;
 }
 
 const commandPattern = /^\/[A-Za-z0-9_]+(?:@[A-Za-z0-9_]+)?/;
 
-const mountedStores = new Set<ChatStore>();
-
-export function cleanup(): void {
-  for (const store of mountedStores) store.mounted = false;
-  mountedStores.clear();
-}
-
-afterEach(cleanup);
-
+// Each render is a different user in their own chat, so renders can't see each other's messages
 export function render(bot: Bot<any>): RenderReturn {
-  const session = getSession(bot);
-  session.store.mounted = false;
-  mountedStores.delete(session.store);
-  const store = createChatStore();
-  session.store = store;
-  mountedStores.add(store);
+  const server = getServer(bot);
+  const store = createChat(server);
 
   const userEvent: UserEvent = {
     sendMessage: async (text) => {
@@ -94,7 +82,7 @@ export function render(bot: Bot<any>): RenderReturn {
           : {}),
       });
       await bot.handleUpdate({
-        update_id: store.nextUpdateId++,
+        update_id: server.nextUpdateId++,
         message: structuredClone(message),
       });
     },
@@ -121,9 +109,9 @@ export function render(bot: Bot<any>): RenderReturn {
 
       await bot.init();
       await bot.handleUpdate({
-        update_id: store.nextUpdateId++,
+        update_id: server.nextUpdateId++,
         callback_query: {
-          id: String(store.nextCallbackQueryId++),
+          id: String(server.nextCallbackQueryId++),
           from: store.user,
           chat_instance: String(store.chat.id),
           message: structuredClone(message),

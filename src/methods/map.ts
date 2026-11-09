@@ -2,8 +2,9 @@ import { ApiMethods, Opts } from "@grammyjs/types";
 import {
   addMessage,
   botInfo,
+  findChat,
   getMessage,
-  type ChatStore,
+  type BotServer,
 } from "../store.ts";
 import { BadRequest } from "./bad-request.ts";
 
@@ -17,7 +18,7 @@ export type Returns<F> = {
 export type MethodMap = {
   [K in keyof ApiMethods<unknown>]: (
     props: Opts<unknown>[K],
-    store: ChatStore,
+    server: BotServer,
   ) => Returns<unknown>[K];
 };
 
@@ -247,8 +248,9 @@ export function close(): Returns<unknown>["close"] {
 }
 export function sendMessage(
   props: Opts<unknown>["sendMessage"],
-  store: ChatStore,
+  server: BotServer,
 ): Returns<unknown>["sendMessage"] {
+  const store = findChat(server, props.chat_id);
   const message = addMessage(store, {
     from: store.bot,
     text: props.text,
@@ -773,16 +775,16 @@ export function getMyDefaultAdministratorRights(
 }
 export function editMessageText(
   props: Opts<unknown>["editMessageText"],
-  store: ChatStore,
+  server: BotServer,
 ): Returns<unknown>["editMessageText"] {
-  if (props.message_id === undefined) {
+  if (props.chat_id === undefined || props.message_id === undefined) {
     throw new Error("Not implemented: editing inline messages");
   }
   if (props.text === undefined) {
     throw new Error("Not implemented: editing rich messages");
   }
   const message = getMessage(
-    store,
+    findChat(server, props.chat_id),
     props.message_id,
     "message to edit not found",
   );
@@ -813,13 +815,13 @@ export function editMessageMedia(
 }
 export function editMessageReplyMarkup(
   props: Opts<unknown>["editMessageReplyMarkup"],
-  store: ChatStore,
+  server: BotServer,
 ): Returns<unknown>["editMessageReplyMarkup"] {
-  if (props.message_id === undefined) {
+  if (props.chat_id === undefined || props.message_id === undefined) {
     throw new Error("Not implemented: editing inline messages");
   }
   const message = getMessage(
-    store,
+    findChat(server, props.chat_id),
     props.message_id,
     "message to edit not found",
   );
@@ -840,8 +842,9 @@ export function stopPoll(
 }
 export function deleteMessage(
   props: Opts<unknown>["deleteMessage"],
-  store: ChatStore,
+  server: BotServer,
 ): Returns<unknown>["deleteMessage"] {
+  const store = findChat(server, props.chat_id);
   const message = getMessage(
     store,
     props.message_id,
