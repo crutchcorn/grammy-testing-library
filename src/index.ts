@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Bot } from "grammy";
 import type {
   Message,
   InlineKeyboardButton as _InlineKeyboardButton,
 } from "@grammyjs/types";
+import "./matchers.ts";
 import { methodMap } from "./methods/map.ts";
 import { findByText, getByText, type TextMatch } from "./queries.ts";
 import { addMessage, createChatStore, type ChatStore } from "./store.ts";
@@ -89,18 +90,4 @@ export function render(bot: Bot<any>): RenderReturn {
     getByText: (text) => getByText(store, text),
     findByText: (text) => findByText(store, text),
   };
-}
-
-interface GrammyTestingLibraryMatchers<R> {
-  toBeInTheChat(): R;
-}
-
-declare module "vitest" {
-  // Vitest 5's Assertion and AsymmetricMatchersContaining both extend Matchers
-  interface Matchers<
-    R extends void | Promise<void> = void | Promise<void>,
-    // Unused, but merged declarations must match Vitest's type parameters exactly
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    T = unknown,
-  > extends GrammyTestingLibraryMatchers<R> {}
 }

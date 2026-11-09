@@ -13,9 +13,7 @@ test("Replies to the `/start` command", async () => {
 
   await userEvent.sendMessage("/start");
 
-  expect(await findByText("Hello World")).toMatchObject({
-    from: { is_bot: true },
-  });
+  expect(await findByText("Hello World")).toBeInTheChat();
 });
 
 test.skip("Is able to handle `/start` command", async () => {

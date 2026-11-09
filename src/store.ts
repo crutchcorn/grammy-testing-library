@@ -56,5 +56,13 @@ export function addMessage(
     chat: store.chat,
   };
   store.messages.push(stored);
+  messageStores.set(stored, store);
   return stored;
+}
+
+const messageStores = new WeakMap<object, ChatStore>();
+
+export function getMessageStore(value: unknown): ChatStore | undefined {
+  if (typeof value !== "object" || value === null) return undefined;
+  return messageStores.get(value);
 }
