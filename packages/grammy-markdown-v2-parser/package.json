@@ -1,0 +1,23 @@
+{
+  "name": "grammy-markdown-v2-parser",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "lint": "eslint . --ext .ts,.mjs",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@grammyjs/types": "^5.0.0"
+  },
+  "devDependencies": {
+    "@grammy-testing-library/config": "workspace:*",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "typescript": "^6.0.2",
+    "vitest": "^5.1.0"
+  }
+}
