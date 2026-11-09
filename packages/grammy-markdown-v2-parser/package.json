@@ -2,6 +2,19 @@
   "name": "grammy-markdown-v2-parser",
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://github.com/crutchcorn/grammy-testing-library/tree/main/packages/grammy-markdown-v2-parser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crutchcorn/grammy-testing-library.git",
+    "directory": "packages/grammy-markdown-v2-parser"
+  },
+  "bugs": {
+    "url": "https://github.com/crutchcorn/grammy-testing-library/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "exports": {
     ".": "./src/index.ts"
   },

@@ -4,6 +4,8 @@
   "type": "module",
   "packageManager": "pnpm@12.11.2",
   "scripts": {
+    "changeset": "changeset",
+    "version-packages": "changeset version && pnpm install --lockfile-only --no-frozen-lockfile --ignore-scripts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "nx run-many -t test",
@@ -11,6 +13,7 @@
     "typecheck": "nx run-many -t typecheck"
   },
   "devDependencies": {
+    "@changesets/cli": "^3.0.3",
     "nx": "^24.0.5",
     "prettier": "^3.9.10"
   }

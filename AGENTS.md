@@ -19,10 +19,16 @@ Run from the repository root; Nx runs each project's script of the same name.
 - Lint: `pnpm lint`
 - Test: `pnpm test`
 
+## Releases
+
+- Add a changeset with `pnpm changeset` for any change that affects a published package's users, choosing the bump and writing a user-facing summary. Skip it for docs, tests, CI, and private packages.
+- Don't bump versions or edit changelogs by hand; the release workflow runs `pnpm version-packages`.
+
 ## CI
 
 - `.github/workflows/ci.yml` checks formatting, linting, and tests; `.github/workflows/zizmor.yml` audits the workflows with zizmor.
-- Keep actions pinned to commit SHAs. Upgrade them with `pnpm update -L --include-github-actions "actions/*" "pnpm/*" "zizmorcore/*"`.
+- `.github/workflows/release.yml` uses Changesets to open a version pull request, then publishes to npm through trusted publishing (OIDC) once it merges.
+- Keep actions pinned to commit SHAs. Upgrade them with `pnpm update -L --include-github-actions "actions/*" "pnpm/*" "zizmorcore/*" "changesets/*"`.
 - Node's version lives in `.node-version` and pnpm's in the root `packageManager` field; CI reads both.
 
 ## Conventions

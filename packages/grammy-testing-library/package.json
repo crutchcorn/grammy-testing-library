@@ -2,6 +2,19 @@
   "name": "grammy-testing-library",
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://github.com/crutchcorn/grammy-testing-library#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crutchcorn/grammy-testing-library.git",
+    "directory": "packages/grammy-testing-library"
+  },
+  "bugs": {
+    "url": "https://github.com/crutchcorn/grammy-testing-library/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "test": "vitest run",
     "lint": "eslint . --ext .ts,.mjs",
