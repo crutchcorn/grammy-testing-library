@@ -30,6 +30,7 @@ interface UserEvent {
 interface RenderReturn {
   userEvent: UserEvent;
   clear: (opts?: ClearOptions) => void;
+  cleanup: () => void;
   getByText: (text: TextMatch) => Message;
   findByText: (text: TextMatch) => Promise<Message>;
 }
@@ -128,9 +129,16 @@ export function render(bot: Bot<any>): RenderReturn {
     );
   };
 
+  // Later API calls to this chat fail with "chat not found", surfacing bot work that outlives the test
+  const cleanup: RenderReturn["cleanup"] = () => {
+    server.chats.delete(store.chat.id);
+    store.messages.length = 0;
+  };
+
   return {
     userEvent,
     clear,
+    cleanup,
     getByText: (text) => getByText(store, text),
     findByText: (text) => findByText(store, text),
   };

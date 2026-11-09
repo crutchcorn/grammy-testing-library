@@ -18,6 +18,7 @@
 ## Test isolation
 
 - Each `render()` creates a user with a unique ID and that user's private chat, so renders can't see each other's messages and `test.concurrent` is safe.
+- `render()` returns `cleanup`, which removes that chat. Register it with the test context's `onTestFinished` (`test("...", ({ onTestFinished }) => ...)`), not the global import.
 - Do not use a global `afterEach` or `onTestFinished` for per-test state. Vitest tracks the current test in one global variable, which is unreliable under `test.concurrent`.
 
 ## Git

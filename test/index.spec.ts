@@ -87,9 +87,23 @@ test("Each render is a separate chat", async () => {
   expect(() => second.getByText("Hello World")).toThrow(/Unable to find/);
 });
 
+test("`cleanup` removes the chat", async () => {
+  const { userEvent, cleanup, findByText } = render(bot);
+
+  await userEvent.sendMessage("/start");
+  const greeting = await findByText("Hello World");
+  cleanup();
+
+  expect(greeting).not.toBeInTheChat();
+  await expect(userEvent.sendMessage("/start")).rejects.toThrow(
+    /chat not found/,
+  );
+});
+
 describe.concurrent("Concurrent tests", () => {
-  test("Choosing Spanish", async ({ expect }) => {
-    const { userEvent, findByText } = render(bot);
+  test("Choosing Spanish", async ({ expect, onTestFinished }) => {
+    const { userEvent, cleanup, findByText } = render(bot);
+    onTestFinished(cleanup);
 
     await userEvent.sendMessage("/language");
     const question = await findByText("What language are you trying to learn?");
@@ -98,8 +112,9 @@ describe.concurrent("Concurrent tests", () => {
     expect(await findByText("¡Vamos!")).toBeInTheChat();
   });
 
-  test("Choosing French", async ({ expect }) => {
-    const { userEvent, findByText } = render(bot);
+  test("Choosing French", async ({ expect, onTestFinished }) => {
+    const { userEvent, cleanup, findByText } = render(bot);
+    onTestFinished(cleanup);
 
     await userEvent.sendMessage("/language");
     const question = await findByText("What language are you trying to learn?");
