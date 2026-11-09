@@ -1,4 +1,5 @@
 import type { Chat, Message, User, UserFromGetMe } from "@grammyjs/types";
+import { BadRequest } from "./methods/bad-request.ts";
 
 export const botInfo: UserFromGetMe = {
   id: 1,
@@ -23,6 +24,7 @@ export interface ChatStore {
   messages: Message[];
   nextMessageId: number;
   nextUpdateId: number;
+  nextCallbackQueryId: number;
 }
 
 export function createChatStore(): ChatStore {
@@ -40,6 +42,7 @@ export function createChatStore(): ChatStore {
     messages: [],
     nextMessageId: 1,
     nextUpdateId: 1,
+    nextCallbackQueryId: 1,
   };
 }
 
@@ -65,4 +68,14 @@ const messageStores = new WeakMap<object, ChatStore>();
 export function getMessageStore(value: unknown): ChatStore | undefined {
   if (typeof value !== "object" || value === null) return undefined;
   return messageStores.get(value);
+}
+
+export function getMessage(
+  store: ChatStore,
+  messageId: number,
+  notFoundReason: string,
+): Message {
+  const message = store.messages.find((m) => m.message_id === messageId);
+  if (!message) throw new BadRequest(notFoundReason);
+  return message;
 }

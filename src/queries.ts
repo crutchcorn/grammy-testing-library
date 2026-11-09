@@ -4,7 +4,7 @@ import type { ChatStore } from "./store.ts";
 
 export type TextMatch = string | RegExp;
 
-function matches(content: string | undefined, matcher: TextMatch): boolean {
+export function matches(content: string | undefined, matcher: TextMatch): boolean {
   if (content === undefined) return false;
   const normalized = content.trim().replace(/\s+/g, " ");
   return typeof matcher === "string"

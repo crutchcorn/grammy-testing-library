@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Bot } from "grammy";
-import type {
-  Message,
-  InlineKeyboardButton as _InlineKeyboardButton,
-} from "@grammyjs/types";
+import type { Message } from "@grammyjs/types";
 import "./matchers.ts";
+import { BadRequest } from "./methods/bad-request.ts";
 import { methodMap } from "./methods/map.ts";
-import { findByText, getByText, type TextMatch } from "./queries.ts";
+import {
+  findByText,
+  getByText,
+  matches,
+  prettyChat,
+  type TextMatch,
+} from "./queries.ts";
 import { addMessage, createChatStore, type ChatStore } from "./store.ts";
 
 interface ClearOptions {
@@ -15,10 +19,7 @@ interface ClearOptions {
 
 interface UserEvent {
   sendMessage: (message: string) => Promise<void>;
-  pressInlineButton: (
-    replyMarkup: Message.CommonMessage,
-    buttonText: string | RegExp, // _InlineKeyboardButton.AbstractInlineKeyboardButton["text"],
-  ) => Promise<void>;
+  pressInlineButton: (message: Message, buttonText: TextMatch) => Promise<void>;
 }
 
 interface RenderReturn {
@@ -45,7 +46,12 @@ function getSession(bot: Bot<any>): Session {
       props: unknown,
       store: ChatStore,
     ) => unknown;
-    return { ok: true, result: handler(payload, session.store) } as any;
+    try {
+      return { ok: true, result: handler(payload, session.store) } as any;
+    } catch (error) {
+      if (!(error instanceof BadRequest)) throw error;
+      return { ok: false, error_code: 400, description: error.message } as any;
+    }
   });
   sessions.set(bot, session);
   return session;
@@ -79,7 +85,39 @@ export function render(bot: Bot<any>): RenderReturn {
         message: structuredClone(message),
       });
     },
-    pressInlineButton: async (_replyMarkup, _buttonText) => {},
+    pressInlineButton: async (message, buttonText) => {
+      if (!store.messages.includes(message)) {
+        throw new Error(
+          `Unable to press "${buttonText}": the message is no longer in the chat\n\n${prettyChat(store)}`,
+        );
+      }
+      const buttons = (message.reply_markup?.inline_keyboard ?? [])
+        .flat()
+        .filter((button) => matches(button.text, buttonText));
+      if (buttons.length !== 1) {
+        throw new Error(
+          `${buttons.length === 0 ? "Unable to find a button" : "Found multiple buttons"} with the text: ${buttonText}\n\n${prettyChat(store)}`,
+        );
+      }
+      const [button] = buttons;
+      if (!("callback_data" in button)) {
+        throw new Error(
+          `Not implemented: pressing "${button.text}", which isn't a callback button`,
+        );
+      }
+
+      await bot.init();
+      await bot.handleUpdate({
+        update_id: store.nextUpdateId++,
+        callback_query: {
+          id: String(store.nextCallbackQueryId++),
+          from: store.user,
+          chat_instance: String(store.chat.id),
+          message: structuredClone(message),
+          data: button.callback_data,
+        },
+      });
+    },
   };
 
   const clear: RenderReturn["clear"] = ({ keepLast: _keepLast } = {}) => {};

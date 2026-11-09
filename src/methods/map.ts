@@ -1,5 +1,14 @@
 import { ApiMethods, Opts } from "@grammyjs/types";
-import { addMessage, botInfo, type ChatStore } from "../store.ts";
+import {
+  addMessage,
+  botInfo,
+  getMessage,
+  type ChatStore,
+} from "../store.ts";
+import { BadRequest } from "./bad-request.ts";
+
+const notModifiedReason =
+  "message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message";
 
 export type Returns<F> = {
   [M in keyof ApiMethods<F>]: ReturnType<ApiMethods<F>[M]>;
@@ -670,8 +679,7 @@ export function unpinAllGeneralForumTopicMessages(
 export function answerCallbackQuery(
   _props: Opts<unknown>["answerCallbackQuery"],
 ): Returns<unknown>["answerCallbackQuery"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  return true;
 }
 export function getUserChatBoosts(
   _props: Opts<unknown>["getUserChatBoosts"],
@@ -764,10 +772,32 @@ export function getMyDefaultAdministratorRights(
   return 0 as never;
 }
 export function editMessageText(
-  _props: Opts<unknown>["editMessageText"],
+  props: Opts<unknown>["editMessageText"],
+  store: ChatStore,
 ): Returns<unknown>["editMessageText"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  if (props.message_id === undefined) {
+    throw new Error("Not implemented: editing inline messages");
+  }
+  if (props.text === undefined) {
+    throw new Error("Not implemented: editing rich messages");
+  }
+  const message = getMessage(
+    store,
+    props.message_id,
+    "message to edit not found",
+  );
+  if (
+    message.text === props.text &&
+    JSON.stringify(message.reply_markup) === JSON.stringify(props.reply_markup)
+  ) {
+    throw new BadRequest(notModifiedReason);
+  }
+  message.text = props.text;
+  message.entities = props.entities;
+  // Telegram removes the inline keyboard when an edit omits `reply_markup`
+  message.reply_markup = props.reply_markup;
+  message.edit_date = Math.floor(Date.now() / 1000);
+  return structuredClone(message) as Returns<unknown>["editMessageText"];
 }
 export function editMessageCaption(
   _props: Opts<unknown>["editMessageCaption"],
@@ -782,10 +812,25 @@ export function editMessageMedia(
   return 0 as never;
 }
 export function editMessageReplyMarkup(
-  _props: Opts<unknown>["editMessageReplyMarkup"],
+  props: Opts<unknown>["editMessageReplyMarkup"],
+  store: ChatStore,
 ): Returns<unknown>["editMessageReplyMarkup"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  if (props.message_id === undefined) {
+    throw new Error("Not implemented: editing inline messages");
+  }
+  const message = getMessage(
+    store,
+    props.message_id,
+    "message to edit not found",
+  );
+  if (
+    JSON.stringify(message.reply_markup) === JSON.stringify(props.reply_markup)
+  ) {
+    throw new BadRequest(notModifiedReason);
+  }
+  message.reply_markup = props.reply_markup;
+  message.edit_date = Math.floor(Date.now() / 1000);
+  return structuredClone(message) as Returns<unknown>["editMessageReplyMarkup"];
 }
 export function stopPoll(
   _props: Opts<unknown>["stopPoll"],
@@ -794,10 +839,16 @@ export function stopPoll(
   return 0 as never;
 }
 export function deleteMessage(
-  _props: Opts<unknown>["deleteMessage"],
+  props: Opts<unknown>["deleteMessage"],
+  store: ChatStore,
 ): Returns<unknown>["deleteMessage"] {
-  throw new Error("Not implemented");
-  return 0 as never;
+  const message = getMessage(
+    store,
+    props.message_id,
+    "message to delete not found",
+  );
+  store.messages.splice(store.messages.indexOf(message), 1);
+  return true;
 }
 export function deleteMessages(
   _props: Opts<unknown>["deleteMessages"],
