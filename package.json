@@ -8,6 +8,7 @@
     "version-packages": "changeset version && pnpm install --lockfile-only --no-frozen-lockfile --ignore-scripts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "build": "nx run-many -t build",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
     "typecheck": "nx run-many -t typecheck"
