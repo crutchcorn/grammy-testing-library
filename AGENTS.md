@@ -7,6 +7,7 @@
 An Nx + pnpm workspace monorepo.
 
 - `packages/grammy-testing-library`: the published library, with its source and tests.
+- `packages/grammy-markdown-v2-parser`: a standalone port of tdlib's `parse_markdown_v2`, which turns MarkdownV2 into text and message entities. It must not depend on the testing library. When changing its parsing, check tdlib's `td/telegram/MessageEntity.cpp` rather than CommonMark behavior.
 - `packages/config` (private): the shared `tsconfig.base.json` and `eslint.base.mjs`. Each project extends them from its own `tsconfig.json` and `eslint.config.mjs`.
 
 ## Checks

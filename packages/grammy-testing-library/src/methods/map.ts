@@ -7,6 +7,7 @@ import {
   type BotServer,
 } from "../store.ts";
 import { BadRequest } from "./bad-request.ts";
+import { formatText } from "./format-text.ts";
 
 const notModifiedReason =
   "message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message";
@@ -251,9 +252,16 @@ export function sendMessage(
   server: BotServer,
 ): Returns<unknown>["sendMessage"] {
   const store = findChat(server, props.chat_id);
+  const { text, entities } = formatText(
+    store,
+    props.text,
+    props.parse_mode,
+    props.entities,
+  );
   const message = addMessage(store, {
     from: store.bot,
-    text: props.text,
+    text,
+    entities,
     ...(props.reply_markup && "inline_keyboard" in props.reply_markup
       ? { reply_markup: props.reply_markup }
       : {}),
@@ -783,19 +791,27 @@ export function editMessageText(
   if (props.text === undefined) {
     throw new Error("Not implemented: editing rich messages");
   }
+  const store = findChat(server, props.chat_id);
+  const { text, entities } = formatText(
+    store,
+    props.text,
+    props.parse_mode,
+    props.entities,
+  );
   const message = getMessage(
-    findChat(server, props.chat_id),
+    store,
     props.message_id,
     "message to edit not found",
   );
   if (
-    message.text === props.text &&
+    message.text === text &&
+    JSON.stringify(message.entities) === JSON.stringify(entities) &&
     JSON.stringify(message.reply_markup) === JSON.stringify(props.reply_markup)
   ) {
     throw new BadRequest(notModifiedReason);
   }
-  message.text = props.text;
-  message.entities = props.entities;
+  message.text = text;
+  message.entities = entities;
   // Telegram removes the inline keyboard when an edit omits `reply_markup`
   message.reply_markup = props.reply_markup;
   message.edit_date = Math.floor(Date.now() / 1000);

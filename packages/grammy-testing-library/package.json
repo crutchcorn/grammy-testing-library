@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@grammyjs/types": "^5.0.0",
-    "grammy": "^1.36.1"
+    "grammy": "^1.36.1",
+    "grammy-markdown-v2-parser": "workspace:*"
   },
   "devDependencies": {
     "@grammy-testing-library/config": "workspace:*",

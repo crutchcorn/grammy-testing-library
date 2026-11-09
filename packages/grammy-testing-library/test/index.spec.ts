@@ -34,6 +34,32 @@ bot.callbackQuery("destroy", async (ctx) => {
   await ctx.deleteMessage();
 });
 
+bot.command("welcome", async (ctx) => {
+  await ctx.reply("*Welcome*, I'm Ida\\!", { parse_mode: "MarkdownV2" });
+});
+
+bot.command("unescaped", async (ctx) => {
+  await ctx.reply("Hello.", { parse_mode: "MarkdownV2" });
+});
+
+test("MarkdownV2 replies are found by their visible text", async () => {
+  const { userEvent, findByText } = render(bot);
+
+  await userEvent.sendMessage("/welcome");
+
+  expect(await findByText("Welcome, I'm Ida!")).toMatchObject({
+    entities: [{ type: "bold", offset: 0, length: 7 }],
+  });
+});
+
+test("Unescaped MarkdownV2 fails like it does on Telegram", async () => {
+  const { userEvent } = render(bot);
+
+  await expect(userEvent.sendMessage("/unescaped")).rejects.toThrow(
+    "Bad Request: can't parse entities: Character '.' is reserved and must be escaped with the preceding '\\'",
+  );
+});
+
 test("Replies to the `/start` command", async () => {
   const { userEvent, findByText } = render(bot);
 
