@@ -4,11 +4,14 @@
   "type": "module",
   "packageManager": "pnpm@12.11.2",
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
     "typecheck": "nx run-many -t typecheck"
   },
   "devDependencies": {
-    "nx": "^24.0.5"
+    "nx": "^24.0.5",
+    "prettier": "^3.9.10"
   }
 }
