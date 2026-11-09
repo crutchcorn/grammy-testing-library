@@ -14,9 +14,16 @@ An Nx + pnpm workspace monorepo.
 
 Run from the repository root; Nx runs each project's script of the same name.
 
+- Format: `pnpm format` (CI runs `pnpm format:check`)
 - Typecheck: `pnpm typecheck`
 - Lint: `pnpm lint`
 - Test: `pnpm test`
+
+## CI
+
+- `.github/workflows/ci.yml` checks formatting, linting, and tests; `.github/workflows/zizmor.yml` audits the workflows with zizmor.
+- Keep actions pinned to commit SHAs. Upgrade them with `pnpm update -L --include-github-actions "actions/*" "pnpm/*" "zizmorcore/*"`.
+- Node's version lives in `.node-version` and pnpm's in the root `packageManager` field; CI reads both.
 
 ## Conventions
 
